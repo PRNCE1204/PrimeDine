@@ -10,3 +10,30 @@
 ::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+/* Styled visible scrollbar (slide bar) for custom-scrollbar containers */
+.custom-scrollbar {
+  scrollbar-width: auto !important;
+  scrollbar-color: rgba(156, 163, 175, 0.6) rgba(229, 231, 235, 0.3) !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: block !important;
+  width: 8px !important;
+  height: 8px !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(229, 231, 235, 0.2) !important;
+  border-radius: 8px !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.6) !important;
+  border-radius: 8px !important;
+  border: 1px solid transparent !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(107, 114, 128, 0.8) !important;
+}

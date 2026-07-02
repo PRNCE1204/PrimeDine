@@ -1,18 +1,21 @@
 import jwt from "jsonwebtoken"
-const isAuth=async (req,res,next) => {
+
+const isAuth = async (req, res, next) => {
     try {
-        const token=req.cookies.token
-        if(!token){
-            return res.status(400).json({message:"token not found"})
+        const token = req.cookies.token
+        if (!token) {
+            return res.status(401).json({ message: "Authentication required. Please sign in." })
         }
-        const decodeToken=jwt.verify(token,process.env.JWT_SECRET)
-        if(!decodeToken){
- return res.status(400).json({message:"token not verify"})
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        if (!decoded) {
+            return res.status(401).json({ message: "Invalid or expired session. Please sign in again." })
         }
-        req.userId=decodeToken.userId
+        req.userId = decoded.userId
+        req.userEmail = decoded.email
+        req.userRole = decoded.role
         next()
     } catch (error) {
-         return res.status(500).json({message:"isAuth error"})
+        return res.status(401).json({ message: "Authentication failed. Please sign in again." })
     }
 }
 

@@ -13,7 +13,7 @@ import axios from 'axios';
 import { FaMobileScreenButton } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
 import { serverUrl } from '../App';
-import { addMyOrder, setTotalAmount } from '../redux/userSlice';
+import { addMyOrder } from '../redux/userSlice';
 function RecenterMap({ location }) {
   if (location.lat && location.lon) {
     const map = useMap()

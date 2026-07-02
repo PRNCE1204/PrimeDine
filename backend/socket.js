@@ -13,6 +13,10 @@ export const socketHandler = (io) => {
       }
     })
 
+    socket.on('order-delayed', (data) => {
+      io.emit('order-delayed-alert', data);
+    });
+
 
     socket.on('updateLocation', async ({ latitude, longitude, userId }) => {
       try {

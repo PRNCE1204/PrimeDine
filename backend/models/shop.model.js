@@ -14,6 +14,11 @@ const shopSchema=new mongoose.Schema({
         ref:"User",
         required:true
     },
+    cook:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        default:null
+    },
     city:{
          type:String,
         required:true

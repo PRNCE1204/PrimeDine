@@ -2,13 +2,14 @@ import mongoose from "mongoose";
 
 const shopOrderItemSchema = new mongoose.Schema({
     item:{
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.Mixed,
         ref: "Item",
         required:true
     },
     name:String,
     price:Number,
-    quantity:Number
+    quantity:Number,
+    image:String
 }, { timestamps: true })
 
 const shopOrderSchema = new mongoose.Schema({
@@ -24,30 +25,25 @@ const shopOrderSchema = new mongoose.Schema({
     shopOrderItems: [shopOrderItemSchema],
     status:{
         type:String,
-        enum:["pending","preparing","out of delivery","delivered"],
+        enum:["pending","preparing","ready to pickup","ready","completed"],
         default:"pending"
     },
-  assignment:{
-     type: mongoose.Schema.Types.ObjectId,
-    ref: "DeliveryAssignment",
-    default:null
-  },
-  assignedDeliveryBoy:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
-deliveryOtp:{
-        type:String,
-        default:null
+    estimatedPrepTime: {
+        type: Number,
+        default: 0
     },
-otpExpires:{
+    preparingAt: {
+        type: Date,
+        default: null
+    },
+    readyAt: {
+        type: Date,
+        default: null
+    },
+    completedAt:{
         type:Date,
         default:null
-    },
-deliveredAt:{
-    type:Date,
-    default:null
-}
+    }
 
 }, { timestamps: true })
 
@@ -71,6 +67,14 @@ const orderSchema = new mongoose.Schema({
     }
     ,
     shopOrders: [shopOrderSchema],
+    partySize: {
+        type: Number,
+        default: 1
+    },
+    tableCleared: {
+        type: Boolean,
+        default: false
+    },
     payment:{
         type:Boolean,
         default:false

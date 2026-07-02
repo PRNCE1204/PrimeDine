@@ -1,18 +1,25 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import UserDashboard from '../components/userDashboard'
-import OwnerDashboard from '../components/OwnerDashboard'
-import DeliveryBoy from '../components/DeliveryBoy'
+import UserDashboard from '../components/user/UserDashboard'
+import OwnerDashboard from '../components/owner/OwnerDashboard'
+import CookDashboard from '../components/cook/CookDashboard'
+import MobileLayout from '../components/MobileLayout'
+import { Navigate } from 'react-router-dom'
+import LandingPage from './LandingPage'
 
 function Home() {
-    const {userData}=useSelector(state=>state.user)
-  return (
-    <div className='w-[100vw] min-h-[100vh] pt-[100px] flex flex-col items-center bg-[#fff9f6]'>
-      {userData.role=="user" && <UserDashboard/>}
-      {userData.role=="owner" && <OwnerDashboard/>}
-      {userData.role=="deliveryBoy" && <DeliveryBoy/>}
-    </div>
-  )
+    const { userData } = useSelector(state => state.user)
+
+    if (!userData) return <Navigate to="/signin" />
+
+    if (userData.role === "customer") {
+        return <LandingPage />
+    }
+    if (userData.role === "admin")    return <OwnerDashboard />
+    if (userData.role === "cook")     return <CookDashboard />
+
+    // Fallback: unknown role — send to landing page
+    return <Navigate to="/" />
 }
 
 export default Home

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { type } from "os";
 
 const userSchema = new mongoose.Schema({
     fullName: {
@@ -9,47 +8,53 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique:true
+        unique: true
     },
-    password:{
+    password: {
         type: String,
     },
-    mobile:{
+    mobile: {
         type: String,
-        required: true, 
+        unique: true,
+        sparse: true   // allows multiple docs with no mobile (e.g. Google-only signups)
     },
-    role:{
-        type:String,
-        enum:["user","owner","deliveryBoy"],
-        required:true
+    googleId: {
+        type: String,
     },
-    resetOtp:{
-        type:String
+    role: {
+        type: String,
+        enum: ["customer", "admin", "cook"],
+        required: true
     },
-    isOtpVerified:{
-        type:Boolean,
-        default:false
+    isEmailVerified: {
+        type: Boolean,
+        default: false
     },
-    otpExpires:{
-        type:Date
+    resetOtp: {
+        type: String
     },
-    socketId:{
-     type:String,
-     
+    isOtpVerified: {
+        type: Boolean,
+        default: false
     },
-    isOnline:{
-        type:Boolean,
-        default:false
+    otpExpires: {
+        type: Date
     },
-   location:{
-type:{type:String,enum:['Point'],default:'Point'},
-coordinates:{type:[Number],default:[0,0]}
-   }
-  
+    socketId: {
+        type: String,
+    },
+    isOnline: {
+        type: Boolean,
+        default: false
+    },
+    location: {
+        type: { type: String, enum: ['Point'], default: 'Point' },
+        coordinates: { type: [Number], default: [0, 0] }
+    }
+
 }, { timestamps: true })
 
-userSchema.index({location:'2dsphere'})
+userSchema.index({ location: '2dsphere' })
 
-
-const User=mongoose.model("User",userSchema)
-export default User
+const User = mongoose.model("User", userSchema)
+export default User

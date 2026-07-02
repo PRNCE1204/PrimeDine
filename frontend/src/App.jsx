@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import SignUp from './pages/SignUp'
 import SignIn from './pages/SignIn'
@@ -7,7 +7,7 @@ import useGetCurrentUser from './hooks/useGetCurrentUser'
 import { useDispatch, useSelector } from 'react-redux'
 import Home from './pages/Home'
 import useGetCity from './hooks/useGetCity'
-import useGetMyshop from './hooks/useGetMyShop'
+import useGetMyShop from './hooks/useGetMyShop'
 import CreateEditShop from './pages/CreateEditShop'
 import AddItem from './pages/AddItem'
 import EditItem from './pages/EditItem'
@@ -19,53 +19,83 @@ import OrderPlaced from './pages/OrderPlaced'
 import MyOrders from './pages/MyOrders'
 import useGetMyOrders from './hooks/useGetMyOrders'
 import useUpdateLocation from './hooks/useUpdateLocation'
-import TrackOrderPage from './pages/TrackOrderPage'
 import Shop from './pages/Shop'
-import { useEffect } from 'react'
-import { io } from 'socket.io-client'
-import { setSocket } from './redux/userSlice'
+import NotFound from './pages/NotFound'
+import GoogleCallback from './pages/GoogleCallback'
+import LandingPage from './pages/LandingPage'
+import MobileLayout from './components/MobileLayout'
+import Menu from './pages/Menu'
+import Reservations from './pages/Reservations'
+import About from './pages/About'
+import TablePinWidget from './components/user/TablePinWidget'
 
-export const serverUrl="http://localhost:8000"
+
+export const serverUrl = "http://localhost:8000"
+
 function App() {
-    const {userData}=useSelector(state=>state.user)
-    const dispatch=useDispatch()
+  const { userData } = useSelector(state => state.user)
+  const dispatch = useDispatch()
+
   useGetCurrentUser()
-useUpdateLocation()
+  useUpdateLocation()
   useGetCity()
-  useGetMyshop()
+  useGetMyShop()
   useGetShopByCity()
   useGetItemsByCity()
   useGetMyOrders()
 
-  useEffect(()=>{
-const socketInstance=io(serverUrl,{withCredentials:true})
-dispatch(setSocket(socketInstance))
-socketInstance.on('connect',()=>{
-if(userData){
-  socketInstance.emit('identity',{userId:userData._id})
-}
-})
-return ()=>{
-  socketInstance.disconnect()
-}
-  },[userData?._id])
+  useEffect(() => {
+    // Other initializations can go here if needed in the future
+  }, [userData?._id, dispatch])
+
+  // Role-based redirect for already-authenticated users visiting auth pages
+  const authRedirect = userData ? <Navigate to="/dashboard" /> : null
 
   return (
-   <Routes>
-    <Route path='/signup' element={!userData?<SignUp/>:<Navigate to={"/"}/>}/>
-    <Route path='/signin' element={!userData?<SignIn/>:<Navigate to={"/"}/>}/>
-      <Route path='/forgot-password' element={!userData?<ForgotPassword/>:<Navigate to={"/"}/>}/>
-      <Route path='/' element={userData?<Home/>:<Navigate to={"/signin"}/>}/>
-<Route path='/create-edit-shop' element={userData?<CreateEditShop/>:<Navigate to={"/signin"}/>}/>
-<Route path='/add-item' element={userData?<AddItem/>:<Navigate to={"/signin"}/>}/>
-<Route path='/edit-item/:itemId' element={userData?<EditItem/>:<Navigate to={"/signin"}/>}/>
-<Route path='/cart' element={userData?<CartPage/>:<Navigate to={"/signin"}/>}/>
-<Route path='/checkout' element={userData?<CheckOut/>:<Navigate to={"/signin"}/>}/>
-<Route path='/order-placed' element={userData?<OrderPlaced/>:<Navigate to={"/signin"}/>}/>
-<Route path='/my-orders' element={userData?<MyOrders/>:<Navigate to={"/signin"}/>}/>
-<Route path='/track-order/:orderId' element={userData?<TrackOrderPage/>:<Navigate to={"/signin"}/>}/>
-<Route path='/shop/:shopId' element={userData?<Shop/>:<Navigate to={"/signin"}/>}/>
-   </Routes>
+    <>
+      <Routes>
+        {/* Public Routes - redirect authenticated users to correct home */}
+        <Route path='/signup' element={userData ? authRedirect : <SignUp />} />
+        <Route path='/signin' element={userData ? authRedirect : <SignIn />} />
+        <Route path='/forgot-password' element={userData ? authRedirect : <ForgotPassword />} />
+        <Route path='/auth/callback' element={<GoogleCallback />} />
+        <Route path='/menu' element={<Menu />} />
+        <Route path='/reservations' element={<Reservations />} />
+        <Route path='/about' element={<About />} />
+
+        {/* Landing Page - public only; authenticated users go to their dashboard */}
+        <Route path='/' element={userData ? <Navigate to="/dashboard" /> : <LandingPage />} />
+
+        {/* Dashboard Route */}
+        <Route path='/dashboard' element={!userData ? <Navigate to="/signin" /> : <Home />} />
+
+        {/* Authenticated User Routes wrapped in MobileLayout */}
+        {userData?.role === "customer" && (
+          <Route element={<MobileLayout />}>
+            <Route path='/cart' element={<CartPage />} />
+            <Route path='/checkout' element={<CheckOut />} />
+            <Route path='/order-placed' element={<OrderPlaced />} />
+            <Route path='/my-orders' element={<MyOrders />} />
+            <Route path='/shop/:shopId' element={<Shop />} />
+          </Route>
+        )}
+
+        {/* Authenticated Admin/Cook Routes */}
+        {(userData?.role === "admin" || userData?.role === "cook") && (
+          <>
+            <Route path='/create-edit-shop' element={<CreateEditShop />} />
+            <Route path='/add-item' element={<AddItem />} />
+            <Route path='/edit-item/:itemId' element={<EditItem />} />
+            {/* MyOrders for owner is handled within OwnerDashboard now, but keeping route just in case */}
+            <Route path='/my-orders' element={<Navigate to="/" />} />
+          </>
+        )}
+
+        {/* Catch All */}
+        <Route path='*' element={<NotFound />} />
+      </Routes>
+      <TablePinWidget />
+    </>
   )
 }
 

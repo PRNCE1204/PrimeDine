@@ -1,0 +1,913 @@
+/* ═══════════════════════════════════════════════════════════════
+   ABOUT US PAGE — PREMIUM DESIGN
+═══════════════════════════════════════════════════════════════ */
+
+.about-root {
+  width: 100%;
+  min-height: 100vh;
+  background: #050505;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 20px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 48px;
+  color: #fff; /* White color as requested */
+  -webkit-text-stroke: 1px rgba(139, 0, 0, 0.8); /* Refined, thinner red border */
+  margin-bottom: 40px;
+  position: relative;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 15px rgba(139, 0, 0, 0.6); /* Smoother glow and depth */
+  border: none;
+  text-decoration: none;
+}
+
+.section-title.text-center {
+  text-align: center;
+}
+
+.highlight-text {
+  color: #d4af37;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.fade-in-up { animation: fadeInUp 1s cubic-bezier(0.25, 0.8, 0.25, 1) both; }
+.slide-in-left { animation: slideInLeft 1s cubic-bezier(0.25, 0.8, 0.25, 1) both; }
+.slide-in-right { animation: slideInRight 1s cubic-bezier(0.25, 0.8, 0.25, 1) both; }
+
+/* ── 1. HERO SECTION ── */
+.about-hero {
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  min-height: 600px;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.about-hero-content {
+  max-width: 900px;
+  z-index: 2;
+}
+
+.about-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 56px;
+  line-height: 1.2;
+  margin-bottom: 24px;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+}
+
+.about-hero p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.85);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ── 2. OUR STORY ── */
+.about-story-section {
+  background: #0a0a0a;
+  position: relative;
+}
+
+.about-story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: center;
+}
+
+.story-subtitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: #d4af37;
+  margin-bottom: 20px;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.about-story-text p {
+  font-size: 18px;
+  line-height: 1.9;
+  color: #dcdcdc;
+  margin-bottom: 25px;
+  letter-spacing: 0.5px;
+}
+
+.about-story-text p.drop-cap::first-letter {
+  float: left;
+  font-family: 'Playfair Display', serif;
+  font-size: 60px;
+  line-height: 50px;
+  padding-top: 4px;
+  padding-right: 8px;
+  color: #d4af37;
+}
+
+.story-signature {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: #d4af37;
+  margin-top: 30px;
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
+  padding-top: 20px;
+  display: inline-block;
+}
+
+.about-story-image {
+  position: relative;
+  padding: 0;
+}
+
+/* Inner wrapper — logo is absolute relative to this, not the padded container */
+.story-img-wrapper {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 2;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.85);
+  border: 2px solid rgba(212, 175, 55, 0.8);
+}
+
+.story-img-wrapper > img {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 16px;
+}
+
+.img-backdrop {
+  display: none;
+}
+
+/* Logo circle — centered on the PHOTO (story-img-wrapper) */
+.about-story-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  width: 180px;
+  height: 180px;
+  background: rgba(8, 8, 8, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 50%;
+  border: 2.5px solid rgba(212, 175, 55, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 0 6px rgba(212, 175, 55, 0.12),
+    0 20px 40px rgba(0,0,0,0.9),
+    inset 0 0 24px rgba(212, 175, 55, 0.15);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.about-story-logo:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+  box-shadow:
+    0 0 0 10px rgba(212, 175, 55, 0.18),
+    0 25px 50px rgba(0,0,0,0.95),
+    inset 0 0 30px rgba(212, 175, 55, 0.25);
+}
+
+.about-story-logo > img {
+  width: 115px;
+  height: 115px;
+  object-fit: contain;
+  border-radius: 0;
+  box-shadow: none !important;
+  border: none !important;
+  filter: drop-shadow(0 2px 12px rgba(0,0,0,0.6)) brightness(1.1);
+}
+
+/* ── 3. WHAT WE OFFER ── */
+.about-offer-section {
+  position: relative;
+  /* Background image applied inline via jsx */
+}
+
+/* Add a subtle dark overlay so the white cards and gold text pop against the bright sky */
+.about-offer-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); /* Darkens the sky just enough for readability */
+  z-index: 0;
+}
+
+.about-offer-section .about-container {
+  position: relative;
+  z-index: 1;
+}
+
+.about-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 40px;
+}
+
+/* ── Botanical Card ── */
+.botanical-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.botanical-card.hover-lift:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+}
+
+/* Patterned leaf background (outer card) */
+.botanical-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background-color: #d4e6c3;
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(107,142,90,0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(107,142,90,0.3) 0%, transparent 50%);
+  z-index: 0;
+}
+
+/* Subtle leaf pattern using repeating unicode leaves */
+.botanical-bg::before {
+  content: '🍃';
+  position: absolute;
+  font-size: 18px;
+  opacity: 0.15;
+  top: 10px; left: 10px;
+  filter: grayscale(0.3);
+}
+
+.botanical-bg::after {
+  content: '🌿';
+  position: absolute;
+  font-size: 18px;
+  opacity: 0.15;
+  top: 10px; right: 10px;
+  filter: grayscale(0.3);
+}
+
+/* Ribbon at the top */
+.botanical-ribbon {
+  position: relative;
+  z-index: 3;
+  font-size: 52px;
+  margin-top: -10px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
+  line-height: 1;
+  margin-bottom: -10px;
+}
+
+/* Inner cream card area */
+.botanical-inner {
+  position: relative;
+  z-index: 2;
+  width: calc(100% - 30px);
+  background: #f8f5ec;
+  border-radius: 12px;
+  border: 2px solid #8aad7a;
+  box-shadow: inset 0 0 0 6px rgba(138,173,122,0.15);
+  padding: 30px 24px 40px;
+  text-align: center;
+  margin: 10px 0 0;
+  flex-grow: 1;
+}
+
+.botanical-inner::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(138,173,122,0.4);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.botanical-inner .card-icon {
+  font-size: 36px;
+  color: #5a8c4a;
+  margin-bottom: 16px;
+}
+
+.botanical-inner h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: #2d4a1e;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.botanical-inner p {
+  font-size: 14px;
+  color: #4a6b35;
+  line-height: 1.7;
+}
+
+/* Botanical flowers at the bottom */
+.botanical-flowers {
+  position: relative;
+  z-index: 3;
+  font-size: 32px;
+  margin-top: -18px;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));
+  letter-spacing: 6px;
+}
+
+
+
+/* ── 4. WHY CHOOSE US ── */
+.about-why-section {
+  background: #050505;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  margin-top: 50px;
+}
+
+.why-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.why-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #d4af37;
+  flex-shrink: 0;
+}
+
+.why-text h4 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-family: 'Playfair Display', serif;
+}
+
+.why-text p {
+  font-size: 15px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.5;
+}
+
+/* ── 5. OUR SPECIALTIES ── */
+.about-specialties-section {
+  background: #050505;
+}
+
+.specialties-subtitle {
+  text-align: center;
+  font-size: 18px;
+  color: rgba(255,255,255,0.5);
+  margin-top: -20px;
+  margin-bottom: 50px;
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
+
+/* Row layouts */
+.sp-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* Row 1: large hero on left, stack on right */
+.sp-hero-card {
+  flex: 2;
+  height: 480px;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+  border: 3px solid #8b0000; /* Dark red border */
+}
+
+.sp-hero-card:hover {
+  transform: scale(1.015);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+}
+
+.sp-side-stack {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sp-side-card {
+  flex: 1;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+  border: 3px solid #8b0000; /* Dark red border */
+}
+
+.sp-side-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+}
+
+/* Row 2: three equal cards */
+.sp-equal-card {
+  flex: 1;
+  height: 300px;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+  border: 3px solid #8b0000; /* Dark red border */
+}
+
+.sp-equal-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+}
+
+/* Overlay */
+.sp-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 30px;
+  gap: 8px;
+  transition: background 0.4s ease;
+}
+
+.sp-hero-card:hover .sp-overlay,
+.sp-side-card:hover .sp-overlay,
+.sp-equal-card:hover .sp-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.98) 0%, rgba(0,0,0,0.5) 60%, transparent 100%);
+}
+
+.sp-overlay h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  margin: 0;
+}
+
+.sp-hero-card .sp-overlay h3 {
+  font-size: 34px;
+}
+
+.sp-overlay p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  margin: 0;
+  transform: translateY(8px);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.sp-hero-card:hover .sp-overlay p,
+.sp-side-card:hover .sp-overlay p,
+.sp-equal-card:hover .sp-overlay p {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Badge tag */
+.sp-tag {
+  display: inline-block;
+  background: #d4af37;
+  color: #000;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  width: fit-content;
+}
+
+
+/* ── IMPACT & VALUES REDESIGNED ── */
+.impact-values-section {
+  background-color: #200000; /* Darker red background to reduce brightness */
+  background-image: 
+    linear-gradient(45deg, rgba(160, 0, 0, 0.25) 25%, transparent 25%, transparent 75%, rgba(160, 0, 0, 0.25) 75%, rgba(160, 0, 0, 0.25)),
+    linear-gradient(45deg, rgba(160, 0, 0, 0.25) 25%, transparent 25%, transparent 75%, rgba(160, 0, 0, 0.25) 75%, rgba(160, 0, 0, 0.25));
+  background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(212, 175, 55, 0.1);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.impact-values-section .about-container {
+  padding-top: 0px; /* Remove space above heading */
+}
+
+.impact-values-section .section-title {
+  white-space: nowrap; /* Keep heading in one single line */
+  margin-top: 20px;
+}
+
+.impact-values-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.iv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+/* Left: Vision & Mission */
+.iv-values {
+  display: flex;
+  flex-direction: column;
+}
+
+.iv-mission-vision {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.iv-card {
+  position: relative;
+  background: rgba(15, 15, 15, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 40px;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.4s ease, border-color 0.4s ease;
+  backdrop-filter: blur(10px);
+}
+
+.iv-card:hover {
+  transform: translateX(10px);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.iv-card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #d4af37, #f3e5ab);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+}
+
+.iv-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  color: #ffd700; /* Yellow golden color */
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.iv-card p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Right: Stats Grid */
+.iv-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.iv-stat-box {
+  background: linear-gradient(145deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 40px 20px;
+  border-radius: 20px;
+  text-align: center;
+  position: relative;
+  transition: all 0.4s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.iv-stat-box:hover {
+  transform: translateY(-8px);
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 175, 55, 0.05);
+}
+
+.iv-stat-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  color: #d4af37;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.iv-stat-suffix {
+  font-size: 32px;
+  margin-left: 4px;
+  color: #f3e5ab;
+}
+
+.iv-stat-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+}
+
+
+
+/* ── 9. TESTIMONIALS ── */
+.about-testimonials-section {
+  background: #050505;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.testimonial-card {
+  background: #111;
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stars {
+  display: flex;
+  gap: 5px;
+  font-size: 18px;
+}
+
+.t-text {
+  font-size: 16px;
+  font-style: italic;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+.t-author {
+  font-weight: 700;
+  color: #d4af37;
+  font-size: 15px;
+}
+
+/* ── 10. VISITING CARD SECTION ── */
+.visiting-card-section {
+  background: linear-gradient(135deg, #050505 0%, #111 100%);
+  padding: 120px 20px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.vc-wrapper {
+  perspective: 1200px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.vc-card {
+  width: 600px;
+  max-width: 100%;
+  height: 350px;
+  position: relative;
+  transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.vc-wrapper:hover .vc-card {
+  transform: rotateY(180deg);
+}
+
+.vc-front, .vc-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 20px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 0 1px rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  background: #0d0d0d;
+  background-image: 
+    linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+    linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 20px 20px, 20px 20px;
+}
+
+/* Front Side */
+.vc-front {
+  transform: rotateY(0deg);
+  border: 2px solid rgba(212, 175, 55, 0.4);
+}
+
+.vc-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.vc-logo img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+}
+
+.vc-logo h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  color: #d4af37;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  margin: 0;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+}
+
+.vc-divider {
+  width: 60px;
+  height: 2px;
+  background: #d4af37;
+  margin: 25px 0;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.vc-tagline {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+}
+
+/* Back Side */
+.vc-back {
+  transform: rotateY(180deg);
+  background: #111;
+  border: 2px solid rgba(212, 175, 55, 0.4);
+  align-items: flex-start;
+  padding: 50px;
+}
+
+.vc-details {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+}
+
+.vc-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 1px;
+}
+
+.vc-icon {
+  color: #d4af37;
+  font-size: 24px;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.4));
+}
+
+.vc-socials {
+  margin-top: auto;
+  width: 100%;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  padding-top: 20px;
+  text-align: right;
+}
+
+.vc-website {
+  color: #d4af37;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+
+/* ── RESPONSIVE DESIGN ── */
+@media (max-width: 992px) {
+  .about-story-grid { grid-template-columns: 1fr; }
+  .specialties-bento {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sp-card.tall { grid-row: span 1; }
+  .sp-card.wide { grid-column: span 1; }
+  
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .vision-mission-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+  .about-hero h1 { font-size: 42px; }
+}
+
+@media (max-width: 768px) {
+  .specialties-bento { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .about-hero h1 { font-size: 32px; }
+  .section-title { font-size: 32px; }
+  .cta-heading { font-size: 36px; }
+  
+  .about-nav .landing-links {
+    display: none; /* Mobile nav handles this differently, fallback */
+  }
+}
