@@ -30,7 +30,7 @@ import About from './pages/About'
 import TablePinWidget from './components/user/TablePinWidget'
 
 
-export const serverUrl = "http://localhost:8000"
+export const serverUrl = import.meta.env.VITE_API_URL || "http://localhost:8000"
 
 function App() {
   const { userData } = useSelector(state => state.user)
