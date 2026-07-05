@@ -361,7 +361,7 @@
 .res-section-custom {
   position: relative;
   z-index: 2;
-  background-image: linear-gradient(rgba(5, 5, 5, 0.6), rgba(5, 5, 5, 0.6)), url('../assets/reservation/birthday_bg.jpg');
+  background-image: linear-gradient(rgba(5, 5, 5, 0.6), rgba(5, 5, 5, 0.6)), url('../assets/Reservation/birthday_bg.jpg');
   background-size: cover;
   background-position: center;
   border-radius: 24px;
@@ -586,7 +586,7 @@
 
 .res-themes-birthday,
 .res-themes-anniversary {
-  background-image: linear-gradient(rgba(5, 5, 5, 0.6), rgba(5, 5, 5, 0.6)), url('../assets/reservation/birthday_bg.jpg');
+  background-image: linear-gradient(rgba(5, 5, 5, 0.6), rgba(5, 5, 5, 0.6)), url('../assets/Reservation/birthday_bg.jpg');
   background-size: cover;
   background-position: center;
   border-radius: 24px;
@@ -934,7 +934,7 @@
 /* ── BUDGET CALCULATOR ── */
 .res-calculator-section {
   padding: 60px 40px;
-  background-image: linear-gradient(rgba(5, 5, 5, 0.6), rgba(5, 5, 5, 0.6)), url('../assets/reservation/birthday_bg.jpg');
+  background-image: linear-gradient(rgba(5, 5, 5, 0.6), rgba(5, 5, 5, 0.6)), url('../assets/Reservation/birthday_bg.jpg');
   background-size: cover;
   background-position: center;
   border: 1px solid rgba(212, 175, 55, 0.2);

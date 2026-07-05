@@ -796,7 +796,7 @@
 
 /* ── DISH CARD ── */
 .mp-dish-card {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)), url('../assets/reservation/birthday_bg.jpg');
+  background-image: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)), url('../assets/Reservation/birthday_bg.jpg');
   background-size: cover;
   background-position: center;
   border: 1.5px solid rgba(180, 140, 70, 0.18);
