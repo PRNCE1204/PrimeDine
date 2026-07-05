@@ -17,6 +17,7 @@ import http from "http"
 import { Server } from "socket.io"
 import { socketHandler } from "./socket.js"
 import session from "express-session"
+import MongoStore from "connect-mongo"
 import passport from "passport"
 import { Strategy as GoogleStrategy } from "passport-google-oauth20"
 
@@ -54,6 +55,11 @@ app.use(session({
     secret: process.env.JWT_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URL,
+        collectionName: 'sessions',
+        ttl: 10 * 60 // 10 minutes
+    }),
     cookie: { secure: false, sameSite: "lax", maxAge: 10 * 60 * 1000 } // lax required for OAuth redirects
 }))
 
