@@ -2,6 +2,10 @@ import Reservation from "../models/reservation.model.js";
 import Shop from "../models/shop.model.js";
 import User from "../models/user.model.js";
 import Review from "../models/review.model.js";
+import fs from "fs";
+import path from "path";
+import { generateReservationPDF } from "../utils/pdf.js";
+import { sendReceiptMail } from "../utils/mail.js";
 
 export const createReservation = async (req, res) => {
     try {
@@ -79,9 +83,41 @@ export const updateReservationStatus = async (req, res) => {
         if (req.body.paymentStatus !== undefined) updateFields.paymentStatus = req.body.paymentStatus;
         if (req.body.paidAmount !== undefined) updateFields.paidAmount = req.body.paidAmount;
 
-        const updated = await Reservation.findByIdAndUpdate(id, updateFields, { new: true });
-        if (!updated) {
+        const existingRes = await Reservation.findById(id).populate("user");
+        if (!existingRes) {
             return res.status(404).json({ message: "Reservation not found" });
+        }
+
+        const updated = await Reservation.findByIdAndUpdate(id, updateFields, { new: true });
+
+        // Check if payment was just completed (transitioned from Unpaid to Paid)
+        if (req.body.paymentStatus === 'Paid' && existingRes.paymentStatus !== 'Paid') {
+            if (existingRes.user && existingRes.user.email) {
+                const tempDir = path.join(process.cwd(), 'temp');
+                if (!fs.existsSync(tempDir)) {
+                    fs.mkdirSync(tempDir, { recursive: true });
+                }
+                const pdfName = `reservation_${updated._id}.pdf`;
+                const pdfPath = path.join(tempDir, pdfName);
+
+                try {
+                    await generateReservationPDF(updated, existingRes.user, pdfPath);
+                    await sendReceiptMail(
+                        existingRes.user.email,
+                        updated.fullName || existingRes.user.fullName || 'Valued Guest',
+                        pdfPath,
+                        pdfName,
+                        'event'
+                    );
+                    fs.unlink(pdfPath, (err) => {
+                        if (err) console.error("Error deleting temp reservation PDF:", err);
+                    });
+                } catch (pdfErr) {
+                    console.error("Failed to generate/send reservation PDF receipt email:", pdfErr);
+                }
+            } else {
+                console.warn(`[WARNING] Cannot send reservation PDF receipt: No registered user email associated with reservation ${id}`);
+            }
         }
 
         // If customer leaves a rating or review, create a Review entry for the owner analytics dashboard

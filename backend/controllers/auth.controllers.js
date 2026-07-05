@@ -1,7 +1,7 @@
 import User from "../models/user.model.js"
 import bcrypt from "bcryptjs"
 import genToken from "../utils/token.js"
-import { sendOtpMail, sendSignupOtpMail } from "../utils/mail.js"
+import { sendOtpMail, sendSignupOtpMail, sendWelcomeMail } from "../utils/mail.js"
 
 // ─── Password strength validator ──────────────────────────────────────────────
 const isStrongPassword = (password) => {
@@ -268,6 +268,11 @@ export const googleCallback = async (req, res) => {
                 role: "customer",  // ← hardcoded, never from state
                 isEmailVerified: true
             })
+            try {
+                await sendWelcomeMail(email, displayName)
+            } catch (mailError) {
+                console.error("Failed to send welcome email in googleCallback:", mailError.message)
+            }
         } else {
             // Existing user → just link googleId if not already linked
             if (!user.googleId) {
@@ -306,6 +311,11 @@ export const googleAuth = async (req, res) => {
                 role: "customer",  // ← hardcoded always
                 isEmailVerified: true
             })
+            try {
+                await sendWelcomeMail(email, fullName)
+            } catch (mailError) {
+                console.error("Failed to send welcome email in googleAuth:", mailError.message)
+            }
         } else {
             // Existing account — update mobile if missing but NEVER change the role
             if (mobile && !user.mobile) user.mobile = mobile

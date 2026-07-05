@@ -4,6 +4,10 @@ import User from "../models/user.model.js"
 import TableSession from "../models/tableSession.model.js"
 import RazorPay from "razorpay"
 import dotenv from "dotenv"
+import fs from "fs"
+import path from "path"
+import { generateTableSessionPDF } from "../utils/pdf.js"
+import { sendReceiptMail } from "../utils/mail.js"
 
 dotenv.config()
 let instance = new RazorPay({
@@ -544,16 +548,44 @@ export const deactivateTableSession = async (req, res) => {
             activeSession.billAmount = totalBill;
             activeSession.isActive = false;
             await activeSession.save();
+
+            // Populate user details to send receipt email
+            await activeSession.populate('user');
+            if (activeSession.user && activeSession.user.email && activeSession.billAmount > 0 && activeSession.items.length > 0) {
+                const tempDir = path.join(process.cwd(), 'temp');
+                if (!fs.existsSync(tempDir)) {
+                    fs.mkdirSync(tempDir, { recursive: true });
+                }
+                const pdfName = `receipt_${activeSession._id}.pdf`;
+                const pdfPath = path.join(tempDir, pdfName);
+
+                try {
+                    await generateTableSessionPDF(activeSession, activeSession.user, pdfPath);
+                    await sendReceiptMail(
+                        activeSession.user.email,
+                        activeSession.user.fullName || 'Valued Guest',
+                        pdfPath,
+                        pdfName,
+                        'dining'
+                    );
+                    // Asynchronously delete the file after email is sent
+                    fs.unlink(pdfPath, (err) => {
+                        if (err) console.error("Error deleting temp PDF:", err);
+                    });
+                } catch (pdfErr) {
+                    console.error("Failed to generate/send table session PDF receipt email:", pdfErr);
+                }
+            }
         }
 
         // Backup update to make sure all active sessions on this table are turned inactive
         await TableSession.updateMany({ tableNumber: tableNumber.toString(), isActive: true }, { isActive: false });
 
-        // Mark all orders for this table as cleared
+        // Mark all orders for this table as cleared and paid
         const tablePattern = `Dine-in / Table ${tableNumber}`;
         await Order.updateMany(
             { "deliveryAddress.text": tablePattern, tableCleared: { $ne: true } },
-            { $set: { tableCleared: true } }
+            { $set: { tableCleared: true, payment: true } }
         );
 
         const io = req.app.get('io');
