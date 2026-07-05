@@ -10,10 +10,23 @@ import { generateTableSessionPDF } from "../utils/pdf.js"
 import { sendReceiptMail } from "../utils/mail.js"
 
 dotenv.config()
-let instance = new RazorPay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+let instance = null;
+const hasRazorpayKeys = process.env.RAZORPAY_KEY_ID && 
+    !process.env.RAZORPAY_KEY_ID.startsWith('//') && 
+    process.env.RAZORPAY_KEY_ID.trim() !== "";
+
+if (hasRazorpayKeys) {
+    try {
+        instance = new RazorPay({
+            key_id: process.env.RAZORPAY_KEY_ID,
+            key_secret: process.env.RAZORPAY_KEY_SECRET,
+        });
+    } catch (err) {
+        console.error("Failed to initialize Razorpay client:", err.message);
+    }
+} else {
+    console.warn("Razorpay credentials missing or placeholder. Razorpay payment integration disabled.");
+}
 
 export const placeOrder = async (req, res) => {
     try {
@@ -118,6 +131,9 @@ export const placeOrder = async (req, res) => {
         }))
 
         if (paymentMethod == "online") {
+            if (!instance) {
+                return res.status(400).json({ message: "Online payment gateway is not configured on this server." });
+            }
             const razorOrder = await instance.orders.create({
                 amount: Math.round(totalAmount * 100),
                 currency: 'INR',
@@ -180,6 +196,9 @@ export const placeOrder = async (req, res) => {
 export const verifyPayment = async (req, res) => {
     try {
         const { razorpay_payment_id, orderId } = req.body
+        if (!instance) {
+            return res.status(400).json({ message: "Online payment gateway is not configured on this server." });
+        }
         const payment = await instance.payments.fetch(razorpay_payment_id)
         if (!payment || payment.status != "captured") {
             return res.status(400).json({ message: "payment not captured" })
