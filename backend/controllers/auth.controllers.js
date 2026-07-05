@@ -14,6 +14,14 @@ const isStrongPassword = (password) => {
 // NOTE: role is intentionally NOT stored here — all registrations are CUSTOMER
 const pendingSignups = new Map()
 
+const isProduction = process.env.NODE_ENV === "production";
+const cookieOptions = {
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true
+};
+
 // ─── SEND SIGNUP OTP ──────────────────────────────────────────────────────────
 export const sendSignupOtp = async (req, res) => {
     try {
@@ -124,12 +132,7 @@ export const signUp = async (req, res) => {
         pendingSignups.delete(email)
 
         const token = await genToken(user._id, user.email, user.role)
-        res.cookie("token", token, {
-            secure: false,
-            sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-            httpOnly: true
-        })
+        res.cookie("token", token, cookieOptions)
 
         return res.status(201).json(user)
     } catch (error) {
@@ -166,12 +169,7 @@ export const signIn = async (req, res) => {
         }
 
         const token = await genToken(user._id, user.email, user.role)
-        res.cookie("token", token, {
-            secure: false,
-            sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-            httpOnly: true
-        })
+        res.cookie("token", token, cookieOptions)
 
         return res.status(200).json(user)
     } catch (error) {
@@ -183,7 +181,7 @@ export const signIn = async (req, res) => {
 // ─── SIGN OUT ─────────────────────────────────────────────────────────────────
 export const signOut = async (req, res) => {
     try {
-        res.clearCookie("token")
+        res.clearCookie("token", cookieOptions)
         return res.status(200).json({ message: "Logged out successfully" })
     } catch (error) {
         return res.status(500).json({ message: `Sign out error: ${error.message}` })
@@ -283,12 +281,7 @@ export const googleCallback = async (req, res) => {
         }
 
         const token = await genToken(user._id, user.email, user.role)
-        res.cookie("token", token, {
-            secure: false,
-            sameSite: "lax",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-            httpOnly: true
-        })
+        res.cookie("token", token, cookieOptions)
 
         return res.redirect(`${process.env.FRONTEND_URL}/auth/callback`)
     } catch (error) {
@@ -324,12 +317,7 @@ export const googleAuth = async (req, res) => {
         }
 
         const token = await genToken(user._id, user.email, user.role)
-        res.cookie("token", token, {
-            secure: false,
-            sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-            httpOnly: true
-        })
+        res.cookie("token", token, cookieOptions)
 
         return res.status(200).json(user)
     } catch (error) {
