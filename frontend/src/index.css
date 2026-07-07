@@ -37,3 +37,9 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: rgba(107, 114, 128, 0.8) !important;
 }
+
+/* Hide assistant widget for cook and admin dashboards */
+body.hide-assistant .shifra-popup,
+body.hide-assistant .shifra-btn {
+  display: none !important;
+}

@@ -48,6 +48,19 @@ function App() {
     // Other initializations can go here if needed in the future
   }, [userData?._id, dispatch])
 
+  useEffect(() => {
+    // Hide assistant for cook/admin, show for customer and non-logged-in users
+    const hideAssistant = userData && (userData.role === 'cook' || userData.role === 'admin');
+    if (hideAssistant) {
+      document.body.classList.add('hide-assistant');
+    } else {
+      document.body.classList.remove('hide-assistant');
+    }
+    return () => {
+      document.body.classList.remove('hide-assistant');
+    };
+  }, [userData]);
+
   // Role-based redirect for already-authenticated users visiting auth pages
   const authRedirect = userData ? <Navigate to="/dashboard" /> : null
 
