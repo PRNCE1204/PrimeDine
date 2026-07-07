@@ -13,7 +13,7 @@ const serviceRequestSchema = new mongoose.Schema({
     },
     requestType: {
         type: String,
-        enum: ['Water', 'Table Cleaning', 'Tissues', 'Finger Bowl', 'Call Waiter', 'Other'],
+        enum: ['Water', 'Table Cleaning', 'Tissues', 'Finger Bowl', 'Call Waiter', 'Other', 'Extra Salad', 'Extra Lemon', 'Spoons & Plates', 'Water Bottle', 'Clean Table'],
         required: true
     },
     status: {
