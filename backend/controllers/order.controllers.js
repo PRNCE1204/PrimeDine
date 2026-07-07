@@ -6,6 +6,7 @@ import RazorPay from "razorpay"
 import dotenv from "dotenv"
 import fs from "fs"
 import path from "path"
+import os from "os"
 import { generateTableSessionPDF } from "../utils/pdf.js"
 import { sendReceiptMail } from "../utils/mail.js"
 
@@ -571,10 +572,7 @@ export const deactivateTableSession = async (req, res) => {
             // Populate user details to send receipt email
             await activeSession.populate('user');
             if (activeSession.user && activeSession.user.email && activeSession.billAmount > 0 && activeSession.items.length > 0) {
-                const tempDir = path.join(process.cwd(), 'temp');
-                if (!fs.existsSync(tempDir)) {
-                    fs.mkdirSync(tempDir, { recursive: true });
-                }
+                const tempDir = os.tmpdir();
                 const pdfName = `receipt_${activeSession._id}.pdf`;
                 const pdfPath = path.join(tempDir, pdfName);
 

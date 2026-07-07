@@ -4,6 +4,7 @@ import User from "../models/user.model.js";
 import Review from "../models/review.model.js";
 import fs from "fs";
 import path from "path";
+import os from "os";
 import { generateReservationPDF } from "../utils/pdf.js";
 import { sendReceiptMail } from "../utils/mail.js";
 
@@ -93,10 +94,7 @@ export const updateReservationStatus = async (req, res) => {
         // Check if payment was just completed (transitioned from Unpaid to Paid)
         if (req.body.paymentStatus === 'Paid' && existingRes.paymentStatus !== 'Paid') {
             if (existingRes.user && existingRes.user.email) {
-                const tempDir = path.join(process.cwd(), 'temp');
-                if (!fs.existsSync(tempDir)) {
-                    fs.mkdirSync(tempDir, { recursive: true });
-                }
+                const tempDir = os.tmpdir();
                 const pdfName = `reservation_${updated._id}.pdf`;
                 const pdfPath = path.join(tempDir, pdfName);
 

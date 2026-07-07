@@ -192,7 +192,19 @@ export default function CookDashboard() {
         })
         .map(formatOrder)
         .filter(Boolean);
-      setOrders(activeOrders);
+
+      setOrders(prevOrders => {
+        return activeOrders.map(newOrder => {
+          const existing = prevOrders.find(p => p._id === newOrder._id);
+          if (existing) {
+            return {
+              ...newOrder,
+              lastAlertedMinutes: existing.lastAlertedMinutes
+            };
+          }
+          return newOrder;
+        });
+      });
 
       const avg = calculateAvgPrepTime(res.data);
       setAvgPrepTime(avg);

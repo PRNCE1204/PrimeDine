@@ -58,6 +58,8 @@ export default function DigitalTwin() {
     }
   });
 
+  const alertedDelaysRef = useRef(new Map());
+
   useEffect(() => {
     localStorage.setItem('owner_activity_feed', JSON.stringify(activityFeed));
   }, [activityFeed]);
@@ -144,6 +146,11 @@ export default function DigitalTwin() {
         if (t) {
           t.bill += so.subtotal || order.totalAmount || 0;
 
+          // Clean up alerted delay status if completed or ready
+          if (isCompleted || so.status === 'ready') {
+            alertedDelaysRef.current.delete(order._id);
+          }
+
           // Store full order info for the detail panel
           t.allOrders.push({
             _id: order._id,
@@ -167,6 +174,39 @@ export default function DigitalTwin() {
             if (isOrderDelayed) {
               t.status = 'Delayed';
               t.foodStatus = 'Delayed';
+
+              // Calculate delay minutes
+              const deadline = new Date(so.preparingAt).getTime() + so.estimatedPrepTime * 60000;
+              const delayMins = Math.max(0, Math.floor((new Date().getTime() - deadline) / 60000));
+              const orderId = order._id;
+              const shortId = orderId.toString().slice(-4).toUpperCase();
+              const tableNo = t.no;
+
+              const lastAlerted = alertedDelaysRef.current.get(orderId);
+              const isInitial = lastAlerted === undefined;
+              const isMinuteInterval = delayMins > 0 && lastAlerted !== delayMins;
+
+              if (isInitial || isMinuteInterval) {
+                const messageText = isInitial
+                  ? `⚠️ Table ${tableNo} order delay: waiting time is over!`
+                  : `⏰ Order #${shortId} for Table ${tableNo} is delayed by ${delayMins} min`;
+
+                // Add to activity feed
+                setActivityFeed(prev => {
+                  if (prev.length > 0 && prev[0].message === messageText) {
+                    return prev;
+                  }
+                  return [{
+                    id: Date.now() + Math.random(),
+                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                    type: 'alert',
+                    message: messageText
+                  }, ...prev].slice(0, 15);
+                });
+
+                toast.error(messageText, { duration: 8500 });
+                alertedDelaysRef.current.set(orderId, isInitial ? 0 : delayMins);
+              }
             } else {
               t.status = so.status === 'pending' ? 'Waiting for Service' : so.status === 'preparing' ? 'Food Preparing' : so.status === 'ready' ? 'Occupied' : 'Occupied';
               t.foodStatus = so.status === 'preparing' ? 'Preparing' : so.status === 'ready' ? 'Ready' : 'Pending';
@@ -187,7 +227,7 @@ export default function DigitalTwin() {
     });
 
     setTables(updatedTables);
-  }, []);
+  }, [alertedDelaysRef]);
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -444,6 +484,10 @@ export default function DigitalTwin() {
         const messageText = data.isInitial 
           ? `⚠️ Table ${data.table} order delay: waiting time is over!`
           : `⏰ Order #${data.shortId} for Table ${data.table} is delayed by ${data.delayMinutes} min`;
+
+        if (data.orderId) {
+          alertedDelaysRef.current.set(data.orderId, data.isInitial ? 0 : data.delayMinutes);
+        }
 
         toast.error(messageText, { duration: 8500 });
         setActivityFeed(prev => {
